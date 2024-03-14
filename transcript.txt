@@ -1,3 +1,322 @@
-Lab 2: Processor Design in LogiSim This lab will be done in the digital logic simulation program Logisim.  Download the software for your machine from moodle after satisfying the Java requirement. As mentioned in the website, “Logisim is an educational tool for designing and simulating digital logic circuits. With its simple toolbar interface and simulation of circuits as you build them, it is simple enough to facilitate learning the most basic concepts related to logic circuits. With the capacity to build larger circuits from smaller subcircuits, and to draw bundles of wires with a single mouse drag, Logisim can be used (and is used) to design and simulate entire CPUs for educational purposes.” As discussed in class, we will do this incrementally. We will ﬁrst create an ALU, then a Register ﬁle and ﬁnally the single cycle Processor that we have discussed in class. Part A: [ungraded] Familiarize yourself with Logisim Complete all the steps listed in the Beginner’s Tutorial. Implement a 4 bit Ripple Carry Adder. Simulate the design for all the 4 x 4 = 16 possible input conditions and submit the log output – show at least some cases where your outputs do not match the output as discussed in class. Speciﬁcally learn how to log outputs of the simulation as also the use of the Test Vector feature. [The next parts will be expanded with more details during as we go along] You are only allowed to use Logisim’s built-in components from the following libraries for all parts of this project:  Part B: Arithmetic Logic Unit (ALU) [7 points] Updated This task is to create an ALU that supports all the operations needed by the instructions in the ISA. Please note that we treat overﬂow as RISC-V does with unsigned instructions, meaning that we ignore overﬂow. You can use Logisim built-in components: Wires, Gates, Arithmetic, Memory The ALU has 3 inputs. 
- And one output Input Name Bit Width Description A 32 Data to use for Input A in the ALU operation B 32 Data to use for Input B in the ALU operation ALUSel 4 Selects which operation the ALU should perform  (see the list of operations with corresponding switch values below) 
-Output Name Bit Width Description Result 32 Result of the ALU operation OverFlow 1 Overflow die to ADD only Zero 1 Zero if ALU operation results in 0  Implement the following functions: ALUSel Value Instruction 0 add: Result	=	A	+	B 1 sll: Result	=	A	<<	B 2 slt: Result	=	(A	<	B	(signed))	?	1	:	0 3 Unused 4 xor: Result	=	A	^	B 5 srl: Result	=	(unsigned)	A	>>	B 6 or: Result	=	A	|	B 7 and: Result	=	A	&	B 8 mul: Result	=	(signed)	(A	*	B)[31:0] 9 mulh: Result	=	(signed)	(A	*	B)[63:32] 10 Unused 11 mulhu: Result	=	(A	*	B)[63:32] 12 sub: Result	=	A	-	B 13 sra: Result	=	(signed)	A	>>	B 14 Unused 15 bsel: Result	=	B  Use the names of your input and output of the adder unit exactly as speciﬁed in the Tables above viz A, B and ALUSel for inputs and Result for output. The name of ﬁle should be alu.circ. Submission: Please submit alu.circ.  Submit  a pdf document which has screen shots to show that the circuit is working.   Part C : Register File (RegFile) [6 points] Although the CPU that we discussed in class has 32 registers, you will only need implement 9 of them (speciﬁed below) to save you some repetitive work. This means your rs1, rs2, and rd signals will still be 5-bit, but we will only test you on the speciﬁed registers. Your RegFile should be able to write to or read from these registers speciﬁed in a given RISC-V instruction without abecting any other registers. There is one notable exception: your RegFile should NOT write to x0, even if an instruction tries. Remember that the zero register should ALWAYS have the value 0x0. You should NOT gate the clock at any point in your RegFile: the clock signal should ALWAYS connect directly to the clock input of the registers without passing through ANY combinational logic. Part D: Single Cycle CPU [7 points] In this part, you will be using logisim-evolution to implement a 32-bit single-cycle processor based on mini RISC-V ISA that we have deﬁned.  Part E: Pipelined CPU [10 points] In this you will be using logisim-evolution to implement a 32-bit multi [2?]-cycle processor based on our mini RISC-V ISA. 
+Ecology & EcosystemEcology: The scientific study of interactions between organisms and
+their environments, focusing on energy transfer.WHAT IS ECOLOGY?
+Ecosystem has two factors:
+Biotic factors : All living organisms
+inhabiting the Earth.
+Abiotic factors : Nonliving parts of
+the environment (i.e.
+temperature,
+soil, light, moisture, air currents).
+Components of Ecosystem
+Organism
+-
+•
+A
+group
+of
+unicellular
+or
+multicellular
+form
+exhibiting
+all
+of
+the
+characteristics
+of
+life
+.
+•
+Produce
+fertile
+offspring
+.
+•
+The
+lowest
+level
+of
+organization
+.
+Population-
+•A group of organisms of one
+species living in the same place
+at the same time.
+•Interbreed.
+•Compete with each other for
+resources (food, mates, shelter,
+etc.).
+Community :
+•Several interacting species in
+a population that inhabit in a
+common environment.
+•They are interdependent.
+Ecosystem:
+•Interaction of populations in
+a community (Biotic) with
+abiotic factors (ex.
+marine,
+terrestrial)
+Biosphere :
+•Life supporting portions of
+Earth composed of air, land,
+fresh water, and salt water.
+•The highest level of
+organization.
+Feeding Relationships
+There are 3 main types of feeding
+relationships
+Producer - Consumer
+Predator–Prey
+Host-PathogenProducer : All autotrophs (Plants).
+Photosynthesis
+Use sun light energy to convert carbon
+dioxide and water into oxygen and
+Carbohydrates
+6CO2+ 6H2O 6O2+ C6H12O6
+Sun LightEnergy
+Consumer - all heterotrophs: they
+ingest food from producers.
+Primary Consumer
+Herbivores: Eat Plants
+Secondary Consumer
+Carnivores: Eat Meat
+Omnivores: Eat both Plants & Animals
+Decomposers: Decaying plants & animals
+Tertiary
+ConsumerSecondary
+Consumer
+DecomposerPrimary
+ConsumerEcological RelationshipsCompetition
+Interspecific competition occurs when individuals of different
+species compete for same resource for their growth and
+survival within an ecosystem system.
+Competitive exclusion
+Russian ecologist G.
+F.
+Gause (1934) grew two closely related species,Paramecium
+AureliaandParamecium caudatumwith limited amount of food.
+When grew together,P.
+caudatumbecame extinct in the culture.
+When two species were grown separately, each population grew rapidly.
+He concluded that two species competing for the same limiting resources cannot
+coexist.
+Resource partitioning
+American ecologist Eugene Odum observed that seven species of Anolis lizards live
+in close proximity, and all feed on insects .
+Competition for food is reduced because each lizard species has different perches
+and preferred insect.
+The differentiation of niches that enables similar species to coexist in a community
+is called resource partitioning.
+Ecological RelationshipsPredation
+Predation is the interaction between species in
+which one species kills and eats, the predator.
+The other which is killed by predator- Prey.
+Ananimal that eatplant’stissues: Predator .
+Alionattacking and eating an antelope: Predator.
+Adaptation of Predator: Many predators also have adaptations such as claws, teeth, fangs, stingers, or poison
+that help them catch and subdue their food.
+Eating and avoiding being eaten are prerequisite to reproductive success, thus the adaptations of both
+predators and prey are refined through natural selection.
+Adaption of Prey: Prey have adaptations that help them avoid being eaten.
+Cryptic coloration:
+Makes animal difficult to
+see by predator
+Canyon tree frogAposematic coloration:
+Effective chemical defenses
+exhibiting bright coloration.
+Poison dart frogEcological RelationshipsMimicry: Some prey species are protected by their resemblance to other species.
+Batesian mimicry:
+A palatable or harmless species
+mimics an unpalatable or
+harmful one.
+Müllerian mimicry:
+Two or more unpalatable
+species resemble each other
+Producer’smimicry:
+Plant leaf mimicking as
+Pitcher to catch insect.Fascinating MimicryFascinating Mimicry
+Ecological RelationshipsSymbiosis: When individuals of two or more species live in direct and intimate
+contact with one another.
+Mutualism:
+Mutualistic symbiosis, or
+mutualism, is an
+interspecies interaction
+that benefits both species
+Inlichens (blue-green algae)
+the algae provide food to the
+fungus through photosynthesis
+and the fungal partner in return
+provides protection.Commensalism:
+An interaction between
+species that benefits one of
+the species but neither
+harms nor helps the other
+The buffalo is getting his back
+cleaned from insects as bird is
+eating the insectsParasitism:
+An interaction in which one organism,
+the parasite, derives its nourishment
+from another organism, its host.,
+which affects the survival of host.
+Ectoparasite:
+Ticks feast on blood of
+living on dogs and cats.
+Endoparasite:
+Ring stage of malarial
+parasite in human blood
+causing Malaria.Ecological succession
+•
+Ecological succession
+is the process by which an ecosystem recovers from some abiotic
+disaster
+like volcanic eruption,
+glaciere
+, fire, earthquake.
+•
+There are stages, and at each stage there are distinct species
+Secondary
+succession
+:
+An
+existing
+community
+has
+been
+cleared
+by
+some
+disturbance
+that
+leaves
+the
+soil
+intact
+.
+After
+sometimes
+the
+area
+begins
+to
+return
+to
+something
+like
+its
+original
+state
+.
+Yellowstone following the 1988 fires
+•
+Two
+types
+of
+succession
+:
+Primary
+succession
+-
+The
+ecosystem
+suffered
+a
+total
+loss
+.
+Species
+from
+the
+outside
+are
+recolonizing
+to
+begins
+in
+a
+virtually
+lifeless
+area
+.
+Glacier Bay, AlaskaSpecies Diversity in CommunitySpecies diversity:
+Variety of different kinds of organisms that
+make up the community.
+It has two
+components.
+Species richness: the number of different species in
+the community.
+Relative abundance: Proportion each species
+represents of all individuals in the community.Example:
+Two small forest communities, each with 100
+individuals distributed among four tree
+species (A, B, C, and D)
+Community 2: 80A, 5B, 5C, 10D
+A DC B
+Community 1: 25A, 25B, 25C, 25D
+1 is more diverse.Biomimicry
+Why engineers need to study ecology?
+•Scientists get the idea from the nature.
+•That helps them to develop devices useful for human use.
+•Stabilizing CO2emissions.
+Science Copies Nature's Secrets - Biomimicry 1.1-8.2Nutrient Cycles
+Cycling maintains homeostasis (balance) in
+the environment.
+•3 cycles to investigate:
+1.
+Water cycle
+2.
+Carbon cycle
+3.
+Nitrogen cycleWater cycle-
+•Evaporation, transpiration, condensation, precipitationCarbon cycle-
+•Photosynthesis and respiration cycle carbon and
+oxygen through the environment.Nitrogen cycle-
+Atmospheric nitrogen (N2) makes up nearly 78%-80% of air.
+Organisms can not use it in that form.
+Lightning and bacteria convert nitrogen into usable forms.
+Nitrogen fixation -convert atmospheric nitrogen (N2) into
+ammonium (NH4+) which can be used to make organic compounds
+like amino acids.
+N2 NH4+
+Only in certain bacteria and industrial technologies can fix
+nitrogen.Global warming: Threat to EcosystemTheozone layer is a region of Earth's stratosphere
+that absorbs most of the Sun's ultraviolet
+radiation.
+It contains high concentration of ozone
+(O3) in relation to other parts.
+Green House Gases : Human activities release a
+variety of gaseous waste products like Carbon
+dioxide, Nitrous oxide etc due to the fossil fuels
+burning, industrialization and deforestation.
+Due to rising concentrations of long-lived greenhouse
+gases, much of the solar radiation that strikes the
+planet is reflected back toward Earth.
+Global models predict that by the end of the 21st
+century, the atmospheric CO2concentration will
+more than double, increasing average global
+temperature by about 3°C (5°F).Global warmingEffect of Global Warming
+Relative sea level increased
+Variation of Earth surface temperature
+Environmental Engineering
+Need many approaches to slow global warming:
+•Replacing fossil fuels with renewable solar and wind
+Power.
+•More use of nuclear power.
+•Stabilizing CO2emissions.
+•Development of Biodegradable materials.
+•Air pollution control & industrial hygiene improvement.
+•Radiation protection, & hazardous waste management.
+•Reduce deforestation around the world.1.
+CAMPBELL B I O L O G Y (9th Edition)
+Section; Unit 8, Chapter 54-56
+Jane B.
+ReeceLisa A.
+Urry
+Michael L.
+Cain
+Steven A.
+Wasserman
+Peter V.
+Minorsky
+Robert B.
+JacksonReferences
